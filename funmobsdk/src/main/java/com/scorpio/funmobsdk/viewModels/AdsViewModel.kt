@@ -38,7 +38,7 @@ class AdsViewModel constructor(application: Application) : AndroidViewModel(appl
         )*/
     }
 
-    fun requestAds(packageName: String, country: String, adLoadCallback: (Boolean) -> Unit) {
+    fun requestAds(auth_token: String, packageName: String, country: String, adLoadCallback: (Boolean, AppAdData?, String?) -> Unit) {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder()
@@ -54,17 +54,19 @@ class AdsViewModel constructor(application: Application) : AndroidViewModel(appl
         val adRequestServiceHelper: AdRequestServiceHelper = AdRequestServiceImpl(retrofit.create(AdRequestService::class.java))
 
         if (appAdData == null) {
-
             CoroutineScope(Dispatchers.IO).launch {
-                adRequestServiceHelper.requestAppAdData(packageName, country).let {
-                    Log.i("ResponseGet", "requestAds: ${it?.package_name}")
+                try {
+                    adRequestServiceHelper.requestAppAdData(auth_token, packageName, country).let {
+                        appAdData = it
+                        adLoadCallback(true, it, "loaded")
+                    }
+                } catch (e: java.lang.Exception) {
 
-                    appAdData = it
-                    adLoadCallback(true)
+                } catch (e: Exception) {
                 }
             }
         } else {
-            adLoadCallback(true)
+            adLoadCallback(true, appAdData, "loaded")
         }
 
         /*appAdData = AppAdData(
@@ -82,6 +84,5 @@ class AdsViewModel constructor(application: Application) : AndroidViewModel(appl
             "https://www.youtube.com/watch?v=BKuFX7gJqFk",
             true
         )*/
-        adLoadCallback(true)
     }
 }

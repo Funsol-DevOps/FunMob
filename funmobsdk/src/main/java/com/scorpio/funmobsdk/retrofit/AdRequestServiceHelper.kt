@@ -4,5 +4,5 @@ import com.scorpio.funmobsdk.model.AppAdData
 import retrofit2.Response
 
 interface AdRequestServiceHelper {
-    suspend fun requestAppAdData(package_name: String, country: String): AppAdData?
+    suspend fun requestAppAdData(auth_token: String, package_name: String, country: String): AppAdData?
 }

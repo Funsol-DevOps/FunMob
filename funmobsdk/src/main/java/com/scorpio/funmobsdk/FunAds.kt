@@ -6,6 +6,7 @@ import android.content.Intent
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.Log
+import com.scorpio.funmobsdk.interfaces.FunAdsCallbacks
 import com.scorpio.funmobsdk.interfaces.FunInterstitialCallbacks
 import com.scorpio.funmobsdk.model.AppAdData
 import com.scorpio.funmobsdk.utils.Constants.TAG
@@ -17,9 +18,14 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class FunAds(private val activity: Activity) {
+class FunAds(private val activity: Activity, private val auth_token: String) {
 
     var funInterstitialCallbacks: FunInterstitialCallbacks? = null
+        set(value) {
+            field = value
+            staticFunInterstitialCallbacks = value
+        }
+    var funAdsCallbacks: FunAdsCallbacks? = null
     private val adsViewModel by lazy { AdsViewModel(activity.application) }
 
     fun showInterstitial() {
@@ -32,16 +38,29 @@ class FunAds(private val activity: Activity) {
             }
         } else {
             Log.i(TAG, "showInterstitial: FunAds is null, requesting ads.")
-            adsViewModel.requestAds("com.facebook.katana", getCountryCode() ?: "") {
-                if (it) {
+            adsViewModel.requestAds(auth_token, activity.applicationContext.packageName, getCountryCode() ?: "") { isLoaded, appAdData, message ->
+                if (isLoaded) {
                     showInterstitial()
+                    appAdData?.let {
+                        funAdsCallbacks?.onAdLoad(appAdData)
+                    }
                 }
             }
         }
     }
 
-    fun showBanner() {
-
+    fun loadAds() {
+        adsViewModel.requestAds(auth_token, activity.applicationContext.packageName, getCountryCode() ?: "") { isLoaded, appAdData, message ->
+            if (isLoaded) {
+                appAdData?.let {
+                    funAdsCallbacks?.onAdLoad(appAdData)
+                }
+            } else {
+                appAdData?.let {
+                    funAdsCallbacks?.onAdError(message ?: "")
+                }
+            }
+        }
     }
 
     fun requestNativeAd(adRequestCallback: (AppAdData?) -> Unit) {
@@ -52,8 +71,8 @@ class FunAds(private val activity: Activity) {
             }
         } else {
             Log.i(TAG, "showNative: FunAds is null, requesting ads.")
-            adsViewModel.requestAds("com.facebook.katana", getCountryCode() ?: "") { isLoad ->
-                if (isLoad) {
+            adsViewModel.requestAds(auth_token, activity.applicationContext.packageName, getCountryCode() ?: "") { isLoaded, appAdData, message ->
+                if (isLoaded) {
                     CoroutineScope(Main).launch {
                         adsViewModel.appAdData?.let { adRequestCallback(it) }
                     }
@@ -70,5 +89,9 @@ class FunAds(private val activity: Activity) {
             return countryCode
         }
         return Locale.getDefault().getCountry()
+    }
+
+    companion object {
+        var staticFunInterstitialCallbacks: FunInterstitialCallbacks? = null
     }
 }

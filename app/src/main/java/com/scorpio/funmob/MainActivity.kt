@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
@@ -14,10 +15,12 @@ import com.scorpio.funmob.databinding.NativeSmallBinding
 import com.scorpio.funmobsdk.FunAds
 import com.scorpio.funmobsdk.customViews.FunMediaView
 import com.scorpio.funmobsdk.customViews.FunNativeAdView
+import com.scorpio.funmobsdk.interfaces.FunAdsCallbacks
+import com.scorpio.funmobsdk.interfaces.FunInterstitialCallbacks
 import com.scorpio.funmobsdk.model.AppAdData
 import com.scorpio.funmobsdk.utils.Constants.TAG
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FunAdsCallbacks, FunInterstitialCallbacks {
 
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
@@ -25,7 +28,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val funAds = FunAds(this@MainActivity)
+        val funAds = FunAds(this@MainActivity, "auth_token_here")
+        funAds.funInterstitialCallbacks = this
+        funAds.funAdsCallbacks = this
 
         with(binding) {
             showInterstitial.setOnClickListener {
@@ -81,5 +86,25 @@ class MainActivity : AppCompatActivity() {
         } else {
             parentNativeContainer.visibility = View.GONE
         }
+    }
+
+    override fun onAdLoad(appAdData: AppAdData) {
+
+    }
+
+    override fun onAdError(error: String) {
+
+    }
+
+    override fun onAdImpression() {
+
+    }
+
+    override fun onAdClose() {
+
+    }
+
+    override fun onAdFailToShow() {
+
     }
 }

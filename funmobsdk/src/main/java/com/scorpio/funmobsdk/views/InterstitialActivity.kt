@@ -8,6 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.scorpio.funmobsdk.FunAds
 import com.scorpio.funmobsdk.databinding.ActivityInterstitialBinding
 import com.scorpio.funmobsdk.model.AppAdData
 import com.scorpio.funmobsdk.utils.NumberConverter
@@ -33,12 +34,15 @@ class InterstitialActivity : AppCompatActivity() {
 
         init()
         initListeners()
+
+        FunAds.staticFunInterstitialCallbacks?.onAdImpression()
     }
 
     private fun init() {
-        if (appAdData == null)
+        if (appAdData == null) {
+            FunAds.staticFunInterstitialCallbacks?.onAdFailToShow()
             finish()
-
+        }
         with(binding) {
             appAdData?.let { data ->
 
@@ -62,11 +66,14 @@ class InterstitialActivity : AppCompatActivity() {
 
     private fun initListeners() {
         with(binding) {
-            btnClose.setOnClickListener { finish() }
+            btnClose.setOnClickListener {
+                FunAds.staticFunInterstitialCallbacks?.onAdClose()
+                finish()
+            }
         }
     }
 
-    private fun goToPlayStore(link: String, packageName: String){
+    private fun goToPlayStore(link: String, packageName: String) {
         val uri = Uri.parse("market://details?id=$packageName")
         val goToMarket = Intent(Intent.ACTION_VIEW, uri)
         try {

@@ -8,9 +8,9 @@ import org.json.JSONObject
 import retrofit2.Response
 
 class AdRequestServiceImpl constructor(private val adRequestService: AdRequestService) : AdRequestServiceHelper {
-    override suspend fun requestAppAdData(package_name: String, country: String): AppAdData? =
+    override suspend fun requestAppAdData(auth_token: String, package_name: String, country: String): AppAdData? =
         adRequestService.requestAppAdData(
-            "Token 996e64fadbe7142c9501a4e60232c297ae615381",
+            auth_token,
             "${Constants.BASE_URL}api/?package_name=$package_name&country=$country"
         )
 
