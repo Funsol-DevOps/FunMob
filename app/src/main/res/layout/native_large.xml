@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.scorpio.funmobsdk.customViews.FunNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/native_small_layout"
+    android:layout_width="match_parent"
+    android:layout_height="270dp"
+    android:background="#D5D5D5"
+    tools:ignore="Overdraw">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="270dp">
+
+        <com.scorpio.funmobsdk.customViews.FunMediaView
+            android:id="@+id/media_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ad_app_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/media_view" />
+
+        <TextView
+            android:id="@+id/ad_headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLength="35"
+            android:singleLine="true"
+            android:text="This is ad heading, you to place the name of incoming app."
+            android:textColor="#000000"
+            android:textSize="13sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/ad_body"
+            app:layout_constraintEnd_toStartOf="@id/ad_attribute"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/ad_app_icon"
+            app:layout_constraintTop_toBottomOf="@id/media_view"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/ad_attribute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ad_badge"
+            app:layout_constraintBottom_toBottomOf="@id/ad_headline"
+            app:layout_constraintEnd_toStartOf="@id/ad_call_to_action"
+            app:layout_constraintStart_toEndOf="@+id/ad_headline"
+            app:layout_constraintTop_toTopOf="@id/ad_headline" />
+
+        <TextView
+            android:id="@+id/ad_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="This is the body of the ad, which is used to display the description of the provided ad."
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ad_call_to_action"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/ad_headline"
+            app:layout_constraintTop_toBottomOf="@+id/ad_headline"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/ad_call_to_action"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:elevation="3dp"
+            android:gravity="center"
+            android:maxWidth="120dp"
+            android:minWidth="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="Install"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/media_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.scorpio.funmobsdk.customViews.FunNativeAdView>
