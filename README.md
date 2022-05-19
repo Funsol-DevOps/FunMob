@@ -36,37 +36,37 @@ Finally intialize the SDK in onCreate() funtion of your "MainActivity"
 ```
 
 ##### Now Show Ads as per your needs
-### If you want to preload the ads, just call
+#### If you want to preload the ads, just call
 ```
     funAds.loadAds()
 ```
 
-### Listen to Ad Load or Fail callbacks by implementing this interface.
+#### Listen to Ad Load or Fail callbacks by implementing this interface.
 ```
   class MainActivity : AppCompatActivity(), FunAdsCallbacks {
     ...
   }
 ```
 
-#### Interstitial Ads
-### Show Interstitial Ad by calling this function.
+### Interstitial Ads
+#### Show Interstitial Ad by calling this function.
 ```
   funAds.showInterstitial()
 ```
-### Listen to Interstitial Ad callbacks by implementing this interface.
+#### Listen to Interstitial Ad callbacks by implementing this interface.
 ```
   class MainActivity : AppCompatActivity(), FunInterstitialCallbacks {
     ...
   }
 ```
 
-#### Native / Native Banner Ads
-### Show Native or Native Banner Ads by calling this function.
+### Native / Native Banner Ads
+#### Show Native or Native Banner Ads by calling this function.
 ```
   funAds.requestNativeAd()
 ```
-## Note: funAds.requestNativeAds will send AdAppData object in callback function.
-## Note: you will get complete code to show native ads in Sample App.
+##### Note: funAds.requestNativeAds will send AdAppData object in callback function.
+##### Note: you will get complete code to show native ads in Sample App.
 
 
 ## License
