@@ -10,7 +10,9 @@ import com.scorpio.funmobsdk.retrofit.AdRequestServiceImpl
 import com.scorpio.funmobsdk.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,24 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class AdsViewModel constructor(application: Application) : AndroidViewModel(application) {
 
     var appAdData: AppAdData? = null
-
-    init {
-        /*appAdData = AppAdData(
-            "id",
-            "QR Scanner & Barcode scanner",
-            "QR & Barcode Scanner is the quickest QR code scanner app / barcode reader & an essential QR reader for each android device.",
-            4.7f,
-            "1,000,000+",
-            6.0,
-            "Hi-Shot Inc",
-            "https://play.google.com/store/apps/details?id=com.freescanner.qrcodereader.barcodescanner.barcodereader.socialmobileapps",
-            "Tools",
-            "com.freescanner.qrcodereader.barcodescanner.barcodereader.socialmobileapps",
-            "https://play-lh.googleusercontent.com/PHmPfVRPMImlFZf1ArGdzSN0O1v0_vKppE_XLrRpFvt8wJuFpvqFe_PZxeNgGFgoE6ol=s360-rw",
-            "https://play-lh.googleusercontent.com/tPxAA33U16pDYVUbz21K1RyjfJvDVkWFnIj_Q6lMrwbiqeo23TM1k4XR59KAltiHQl4=w1440-h620-rw",
-            false
-        )*/
-    }
 
     fun requestAds(auth_token: String, packageName: String, country: String, adLoadCallback: (Boolean, AppAdData?, String?) -> Unit) {
         val loggingInterceptor = HttpLoggingInterceptor()
@@ -58,31 +42,28 @@ class AdsViewModel constructor(application: Application) : AndroidViewModel(appl
                 try {
                     adRequestServiceHelper.requestAppAdData(auth_token, packageName, country).let {
                         appAdData = it
-                        adLoadCallback(true, it, "loaded")
+                        Log.d("FunMobTag", "Ad Loaded $it")
+                        withContext(Main) {
+                            adLoadCallback(true, it, "loaded")
+                        }
                     }
                 } catch (e: java.lang.Exception) {
-
+                    withContext(Main) {
+                        adLoadCallback(false, null, "fail to load ads")
+                    }
+                    Log.d("FunMobTag", "Fail to load ad")
                 } catch (e: Exception) {
+                    withContext(Main) {
+                        adLoadCallback(false, null, "fail to load ads")
+                    }
+                    Log.d("FunMobTag", "Fail to load ad")
                 }
             }
         } else {
-            adLoadCallback(true, appAdData, "loaded")
+            Log.d("FunMobTag", "Ad Already Loaded $appAdData")
+            CoroutineScope(Main).launch {
+                adLoadCallback(true, appAdData, "loaded")
+            }
         }
-
-        /*appAdData = AppAdData(
-            "id",
-            "QR Scanner & Barcode scanner",
-            "QR & Barcode Scanner is the quickest QR code scanner app / barcode reader & an essential QR reader for each android device.",
-            4.7f,
-            "1,000,000+",
-            6.0,
-            "Hi-Shot Inc",
-            "https://play.google.com/store/apps/details?id=com.freescanner.qrcodereader.barcodescanner.barcodereader.socialmobileapps",
-            "Tools",
-            "com.freescanner.qrcodereader.barcodescanner.barcodereader.socialmobileapps",
-            "https://play-lh.googleusercontent.com/PHmPfVRPMImlFZf1ArGdzSN0O1v0_vKppE_XLrRpFvt8wJuFpvqFe_PZxeNgGFgoE6ol=s360-rw",
-            "https://www.youtube.com/watch?v=BKuFX7gJqFk",
-            true
-        )*/
     }
 }

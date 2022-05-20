@@ -4,6 +4,6 @@ import java.util.*
 
 object Constants {
     const val TAG = "FunAdsTag"
-    const val BASE_URL = "http://192.168.2.161:8000/"
+    const val BASE_URL = "https://downloadvid.app:8085/"
 
 }

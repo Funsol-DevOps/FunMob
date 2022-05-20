@@ -97,11 +97,9 @@ class MainActivity : AppCompatActivity(), FunAdsCallbacks, FunInterstitialCallba
     }
 
     override fun onAdImpression() {
-
     }
 
     override fun onAdClose() {
-
     }
 
     override fun onAdFailToShow() {
